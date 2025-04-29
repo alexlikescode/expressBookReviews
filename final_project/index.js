@@ -15,20 +15,20 @@ app.use("/customer/auth/*", function auth(req,res,next){
     const password = req.body.password;
 
     if(req.session.authorization) {
-        // Generate JWT access token
-        let accessToken = jwt.sign({
-            data: password
-        }, 'access', { expiresIn: 60 * 60 });
-
-        // Store access token and username in session
-        req.session.authorization = {
-            accessToken, username
-        }
-        return res.status(200).send("User successfully logged in");
-    } else {
-        return res.status(208).json({ message: "Invalid Login. Check username and password" });
-    }
-});
+        let token = req.session.authorization['accessToken']; // Access Token
+        jwt.verify(token, "access",(err,user)=>{
+            if(!err){
+                req.session.username = user;
+                next();
+            }
+            else{
+                return res.status(403).json({message: "User not authenticated"})
+            }
+         });
+     } else {
+         return res.status(403).json({message: "User not logged in"})
+     }
+    });
 
  
 const PORT =5000;

@@ -42,11 +42,12 @@ regd_users.post("/login", (req,res) => {
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
+  console.log("Review");
   const isbn = req.params.isbn;
-  let username = req.session.username;
+  let username = req.session.username.data;
   
   let review = req.query.review;
-  console.log(username,review);
+  
   //let rev = {user:userd,review:details}
   
   //const user = req.body.username;
@@ -54,15 +55,16 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
                     "User" : username,
                     "Rating"  : review
                 }
-  for(let i=0; i < books[isbn].review.length; i++){
-        if(books[isbn].review[i].User = username){
-            books[isbn].review[i].Rating = review;
-            return res.status(201).json({message:"Review edited successfully"})
- 
-        }
-    }
+  console.log(userRating);
+  if(books[isbn].reviews[userRating.User]){
+    books[isbn].reviews[userRating.User] = userRating.Rating;
+    return res.status(201).json({message:"Review edited successfully"})
+  }
+   
 
-   books[isbn].rating.push(userRating);
+   books[isbn].reviews[userRating.User] = userRating.Rating;
+   console.log(books[isbn].reviews[userRating.User]);
+   //console.log(books[isbn].reviews.length);
    return res.status(201).json({message:"Review added successfully"})
  });
 

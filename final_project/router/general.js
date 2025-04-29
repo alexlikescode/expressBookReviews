@@ -71,7 +71,7 @@ public_users.get('/title/:title',function (req, res) {
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   const isbn = req.params.isbn;
-  res.send('The book '+books[isbn].title+' has a review of ' + books[isbn].review);
+  res.send('The book '+books[isbn].title+' has a review of ' + JSON.stringify(books[isbn].reviews,null,4));
 });
 
 module.exports.general = public_users;
