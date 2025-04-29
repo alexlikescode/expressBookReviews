@@ -33,22 +33,26 @@ public_users.get('/author/:author',function (req, res) {
             filterbooks.push(books[index]);
         }
     }
-    //let filtered_users = users.filter((user) => user.email === email);
-    //let filterbooks = books.filter((book,index) => book[index].author === author);
-       
     res.send(filterbooks);
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    const title = req.params.title;
+    let filterbooks = [];
+
+    for (let index = 1;index < 11; index ++) {
+        if (books[index].title === title){
+            filterbooks.push(books[index]);
+        }
+    }
+    res.send(filterbooks);
 });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbn = req.params.isbn;
+  res.send('The book '+books[isbn].title+' has a review of ' + books[isbn].review);
 });
 
 module.exports.general = public_users;
