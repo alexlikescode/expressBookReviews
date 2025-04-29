@@ -13,6 +13,7 @@ const authenticatedUser = (username,password)=>{ //returns boolean
 //write code to check if username and password match the one we have in records.
     for(let i=0; i < users.length; i++){
         if((users[i].username = username) && (users[i].password = password)){
+            console.log("hi" + users[i].username);
             return true;
         }
     }
@@ -23,8 +24,8 @@ const authenticatedUser = (username,password)=>{ //returns boolean
 regd_users.post("/login", (req,res) => {
   const username = req.body.username;
   const password = req.body.password;  
-  let check = authenticatedUser(username,password);
-  if (!check){
+  
+  if (!(authenticatedUser(username,password))){
        return res.status(404).json({ message: "Invalid Cridentials" });
   }
     // Generate JWT access token
