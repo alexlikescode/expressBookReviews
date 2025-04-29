@@ -42,9 +42,29 @@ regd_users.post("/login", (req,res) => {
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
-});
+  const isbn = req.params.isbn;
+  let username = req.session.username;
+  
+  let review = req.query.review;
+  console.log(username,review);
+  //let rev = {user:userd,review:details}
+  
+  //const user = req.body.username;
+  const userRating = {
+                    "User" : username,
+                    "Rating"  : review
+                }
+  for(let i=0; i < books[isbn].review.length; i++){
+        if(books[isbn].review[i].User = username){
+            books[isbn].review[i].Rating = review;
+            return res.status(201).json({message:"Review edited successfully"})
+ 
+        }
+    }
+
+   books[isbn].rating.push(userRating);
+   return res.status(201).json({message:"Review added successfully"})
+ });
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
