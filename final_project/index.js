@@ -14,11 +14,11 @@ app.use("/customer/auth/*", function auth(req,res,next){
     const username = req.body.username;
     const password = req.body.password;
 
-    if (authenticatedUser(username, password)) {
+    if(req.session.authorization) {
         // Generate JWT access token
         let accessToken = jwt.sign({
             data: password
-        }, 'access', { expiresIn: 60 });
+        }, 'access', { expiresIn: 60 * 60 });
 
         // Store access token and username in session
         req.session.authorization = {
