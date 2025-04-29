@@ -21,14 +21,23 @@ const authenticatedUser = (username,password)=>{ //returns boolean
 
 //only registered users can login
 regd_users.post("/login", (req,res) => {
-  let check = authenticatedUser(username, password);
-  if (check){
-    res.send('Welcome' + 'Username');
-  } else {
-    res.send('User doesnt exist!');
+  const username = req.body.username;
+  const password = req.body.password;  
+  let check = authenticatedUser(username,password);
+  if (!check){
+       return res.status(404).json({ message: "Invalid Cridentials" });
   }
-    
+    // Generate JWT access token
+    let accessToken = jwt.sign({
+        data: username
+    }, 'access', { expiresIn: 60 * 60 });
+    // Store access token in session
+    req.session.authorization = {
+        accessToken
+    }
+    return res.status(200).send("User successfully logged in");
 });
+
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
