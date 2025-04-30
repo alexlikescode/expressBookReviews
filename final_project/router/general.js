@@ -32,6 +32,7 @@ public_users.post("/register", (req,res) => {
     return res.status(404).json({message: "Unable to register user."});
 });
 
+//List of all books with Promises
 
 const getBooks = () => {
     return new Promise((resolve, reject) => {
@@ -50,10 +51,25 @@ public_users.get('/',async function (req, res) {
   }
 });
 
+//Books from isbn with Promises
+const getIsbn = (isbn) => {
+            return new Promise((resolve, reject) => {
+            let isb = parseInt(isbn);
+            if (books[isb]) {
+                resolve(books[isb]);
+            } else {
+                reject({ status: 404, message: `Book ${isbn} not found` });
+            }
+        });
+    };
+
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-    const isbn = req.params.isbn;
-    res.send(books[isbn]);
+    getIsbn(req.params.isbn)
+    .then(
+        result => res.send(result),
+        error => res.status(error.status).json({message: error.message})
+    );
  });
   
 // Get book details based on author
