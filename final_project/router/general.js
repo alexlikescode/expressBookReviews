@@ -72,17 +72,13 @@ public_users.get('/isbn/:isbn',function (req, res) {
     );
  });
   
-// Get book details based on author
+// Get books by author
 public_users.get('/author/:author',function (req, res) {
     const author = req.params.author;
-    let filterbooks = [];
-
-    for (let index = 1;index < 11; index ++) {
-        if (books[index].author === author){
-            filterbooks.push(books[index]);
-        }
-    }
-    res.send(filterbooks);
+    getBooks()
+    .then((bookDb) => Object.values(bookDb))
+    .then((books) => books.filter((book) => book.author === author))
+    .then((filteredBooks) => res.send(filteredBooks));
 });
 
 // Get all books based on title
@@ -100,8 +96,12 @@ public_users.get('/title/:title',function (req, res) {
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  const isbn = req.params.isbn;
-  res.send('The book '+books[isbn].title+' has a review of ' + JSON.stringify(books[isbn].reviews,null,4));
+    const isbn = req.params.isbn;
+    getIsbn(req.params.isbn)
+    .then(
+        result => res.send(result.reviews),
+        error => res.status(error.status).json({message: error.message})
+    );
 });
 
 module.exports.general = public_users;
